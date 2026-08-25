@@ -1,0 +1,99 @@
+name: deploy production
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - tests
+    types:
+      - completed
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+      vars.PRODUCTION_DEPLOYMENTS_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://jamyfashionsug.syntaxsystems.co
+    env:
+      APP_ROOT: /var/www/jamyfashionsug
+      DEPLOY_HOST: ${{ secrets.VPS_HOST }}
+      DEPLOY_USER: ${{ secrets.VPS_USER }}
+      RELEASE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+    steps:
+      - name: Checkout tested revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install production PHP dependencies
+        run: composer install --no-dev --prefer-dist --no-interaction --no-progress --classmap-authoritative
+
+      - name: Build frontend assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Package release
+        run: |
+          tar \
+            --exclude=.git \
+            --exclude=.github \
+            --exclude=.env \
+            --exclude=node_modules \
+            --exclude=database/database.sqlite \
+            --exclude=storage \
+            --exclude=tests \
+            --exclude=docs \
+            --exclude=deploy \
+            -czf "/tmp/jamy-${RELEASE_SHA}.tar.gz" .
+
+      - name: Configure SSH
+        env:
+          DEPLOY_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -d -m 0700 ~/.ssh
+          printf '%s\n' "$DEPLOY_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 0600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+      - name: Upload release
+        run: |
+          scp \
+            -o BatchMode=yes \
+            "/tmp/jamy-${RELEASE_SHA}.tar.gz" \
+            "${DEPLOY_USER}@${DEPLOY_HOST}:${APP_ROOT}/incoming/${RELEASE_SHA}.tar.gz"
+
+      - name: Activate release
+        run: |
+          ssh -o BatchMode=yes "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "bash -s -- '${RELEASE_SHA}' '${APP_ROOT}/incoming/${RELEASE_SHA}.tar.gz'" \
+            < deploy/release.sh
