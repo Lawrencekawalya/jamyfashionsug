@@ -73,15 +73,22 @@ install -d -m 2775 -o "${DEPLOY_USER}" -g "${WEB_GROUP}" \
 if [[ ! -f "${APP_ROOT}/shared/.env" ]]; then
     cp "${SCRIPT_DIRECTORY}/production.env.example" "${APP_ROOT}/shared/.env"
     generated_app_key="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
-    generated_database_password="$(php -r 'echo bin2hex(random_bytes(24));')"
     sed -i "s|^APP_KEY=$|APP_KEY=${generated_app_key}|" "${APP_ROOT}/shared/.env"
-    sed -i "s|^DB_PASSWORD=$|DB_PASSWORD=${generated_database_password}|" "${APP_ROOT}/shared/.env"
 fi
 
 database_password="$(sed -n 's/^DB_PASSWORD=//p' "${APP_ROOT}/shared/.env")"
 
-if [[ ! "${database_password}" =~ ^[a-f0-9]{48}$ ]]; then
-    echo 'The production DB_PASSWORD must be a 48-character hexadecimal value.' >&2
+if [[ ! "${database_password}" =~ [A-Z] ]] \
+    || [[ ! "${database_password}" =~ [a-z] ]] \
+    || [[ ! "${database_password}" =~ [0-9] ]] \
+    || [[ ! "${database_password}" =~ [!_+=.-] ]] \
+    || (( ${#database_password} < 24 )); then
+    database_password="Jf1!$(php -r 'echo base64_encode(random_bytes(24));')"
+    sed -i "s|^DB_PASSWORD=.*$|DB_PASSWORD=${database_password}|" "${APP_ROOT}/shared/.env"
+fi
+
+if [[ ! "${database_password}" =~ ^[A-Za-z0-9!_+=./-]{24,100}$ ]]; then
+    echo 'The production DB_PASSWORD contains unsupported characters.' >&2
     exit 1
 fi
 
