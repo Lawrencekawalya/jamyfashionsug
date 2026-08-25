@@ -1,8 +1,8 @@
-# Jamy Fashions UG Homepage Implementation Plan
+# Jamy Fashion's UG Homepage Implementation Plan
 
 ## 1. Project Goal
 
-Build a polished, mobile-first homepage concept that presents Jamy Fashions UG as a professional online shop for ladies' Muslim casual dresses and hijabs.
+Build a polished, mobile-first homepage concept that presents Jamy Fashion's UG as a professional online shop for ladies' Muslim casual dresses, hijabs, and complementary fashion items.
 
 The first delivery is intentionally a focused sales demo, not a complete e-commerce platform. Its job is to help the client picture the finished brand experience, browse a curated sample collection, and start an order through WhatsApp.
 
@@ -16,9 +16,9 @@ A visitor should be able to:
 4. Start a WhatsApp order with the relevant product already included in the message.
 5. Find the brand story, contact details, and TikTok/social links.
 
-### Working brand name
+### Confirmed brand name
 
-The repository and proposal suggest **Jamy Fashions UG**. The exact spelling, capitalisation, and punctuation must be confirmed from the supplied logo before implementation.
+Use **Jamy Fashion's UG**, matching the supplied logo. The supporting brand line is **“Style. Confidence. You.”**
 
 ## 2. Scope
 
@@ -28,8 +28,9 @@ The repository and proposal suggest **Jamy Fashions UG**. The exact spelling, ca
 - Branded navigation and mobile menu.
 - Hero section using the client's strongest product/lifestyle photo.
 - Shop-by-category cards for Casual Dresses and Hijabs.
+- A compact “Also available” treatment for accessories, bags and footwear, and custom outfits.
 - Featured products or new arrivals with photos, prices, and descriptions.
-- Brand value/story section: “Why Jamy Fashions UG”.
+- Brand value/story section: “Why Jamy Fashion's UG”.
 - WhatsApp ordering call to action.
 - TikTok/social section or social callout.
 - Contact information and footer.
@@ -51,21 +52,29 @@ The repository and proposal suggest **Jamy Fashions UG**. The exact spelling, ca
 
 These can be proposed as Phase 2 only after the client approves the concept, project scope, price, and deposit.
 
-## 3. Required Client Content
+## 3. Confirmed Materials and Remaining Content
 
-Before the final branded version, collect and confirm:
+### Confirmed for the concept
 
-- Original logo file, preferably SVG or a high-resolution transparent PNG.
-- Exact business name and preferred spelling.
-- WhatsApp business number with country code.
-- TikTok profile URL and any other active social links.
-- At least 6–10 clear product photos, preferably uncropped originals.
-- Product name, category, price in UGX, available colours/sizes, and one-line description for each item.
-- Short brand story or founder statement.
+- Square JPEG logo reference at `docs/provided-materials/jamyfassions-logo.jpeg`.
+- Brand flyer and founder/brand portrait at `docs/provided-materials/WhatsApp Image 2026-08-25 at 12.48.46 PM.jpeg`.
+- Six dress photographs covering approximately four distinct looks.
+- Two high-resolution hijab compositions showing black, olive, brown, and navy options.
+- WhatsApp number: `+256 701 419 722`.
+- Temporary TikTok destination: `https://www.tiktok.com/`.
+- Sample prices may rotate between `UGX 25,000`, `UGX 30,000`, and `UGX 35,000`.
+- The business may mention ready-to-wear pieces, hijabs and accessories, bags and footwear, and custom outfits.
+- Brand-story direction from the supplied flyer.
+
+### Still to confirm before production launch
+
+- The official TikTok business profile URL.
+- Real product names, exact product-to-price mapping, sizes, colours, fabrics, and current availability.
 - Delivery areas, pickup details, operating hours, and ordering expectations.
 - Preferred contact details and any approved customer testimonials.
+- Whether all service categories are currently available or should be worded as “available on request”.
 
-If some copy is not ready, clearly labelled sample copy may be used in the concept and replaced before launch.
+The concept will use elegant descriptive sample names and the approved rotating prices. These remain demonstration content and must be replaced or confirmed before public launch.
 
 ## 4. Brand and Visual Direction
 
@@ -129,9 +138,11 @@ Two strong image-led cards:
 
 Each card should include a short description and lead the visitor to the matching product group on the page.
 
+A smaller supporting row can mention accessories, bags and footwear, and custom outfits without presenting an unsupported product catalogue for those categories.
+
 ### 5.5 Featured products / new arrivals
 
-A curated grid of approximately 6 products. Each card should show:
+A curated grid of approximately 6 sample products. The dress grid will treat alternate angles as one product rather than inflating the catalogue. Hijab colours can provide the remaining featured items. Each card should show:
 
 - Product photograph.
 - Product name.
@@ -142,7 +153,20 @@ A curated grid of approximately 6 products. Each card should show:
 
 For the sample, these products will be maintained as typed local content so the concept can be completed quickly. Product records in the database are deferred until a real catalogue is commissioned.
 
-### 5.6 Why Jamy Fashions UG
+### 5.5.1 Sample product working set
+
+| Working product | Source image(s) | Sample price |
+| --- | --- | ---: |
+| Sky Blue Everyday Abaya | `product11.jpeg` | UGX 35,000 |
+| Sage Belted Abaya | `product12.jpeg` | UGX 30,000 |
+| Navy Belted Abaya | `product13.jpeg`, `product14.jpeg` | UGX 35,000 |
+| Terracotta Tiered Dress | `product15.jpeg`, `product16.jpeg` | UGX 30,000 |
+| Essential Chiffon Hijab | `hijab2.png` | UGX 25,000 |
+| Classic Chiffon Hijab | `hijabs1.png` | UGX 25,000 |
+
+These names and mappings are presentation copy, not confirmed inventory facts.
+
+### 5.6 Why Jamy Fashion's UG
 
 A short brand/value section with three credible promises, for example:
 
@@ -160,11 +184,11 @@ A high-contrast branded section explaining the simple ordering flow:
 2. Send its details through WhatsApp.
 3. Confirm size, colour, delivery, and payment directly with the business.
 
-The main WhatsApp button should open in a new tab and use a properly encoded prefilled message.
+The main WhatsApp button should open `https://wa.me/256701419722` in a new tab and use a properly encoded prefilled message.
 
 ### 5.8 TikTok / social section
 
-Use a compact section that encourages visitors to follow new looks and arrivals on TikTok. Do not embed a heavy social feed in the sample; use selected imagery and an external profile link for better reliability and speed.
+Use a compact section that encourages visitors to follow new looks and arrivals on TikTok. Do not embed a heavy social feed in the sample; use selected imagery and an external profile link for better reliability and speed. Until the official profile is supplied, link to the TikTok homepage and do not imply it is the brand's account.
 
 ### 5.9 Footer
 
@@ -245,23 +269,40 @@ This uses the existing `home` route and Inertia page instead of introducing unne
 - Eager-load only the main hero image; lazy-load below-the-fold product imagery.
 - Avoid upscaling small WhatsApp-compressed photos beyond a credible display size.
 
+### Supplied asset mapping
+
+- Hero: `product11.jpeg` in a contained editorial image panel rather than a full-bleed crop.
+- Dresses category: `product15.jpeg`.
+- Hijabs category: use a balanced crop from `hijab2.png` or `hijabs1.png`.
+- Brand story: use copy and brand direction from the flyer; do not render the full flyer as page content.
+- Featured products: use the working set above and keep alternate dress angles attached to the same item.
+- The two hijab PNGs are large enough for responsive crops but should be converted to optimised WebP/AVIF derivatives for delivery.
+
+### Logo preparation
+
+- Preserve the supplied JPEG as the visual source of truth.
+- Reconstruct a clean, scalable SVG version for the website because no transparent master is available.
+- Prepare a full lockup for larger placements and a simplified monogram for compact navigation/favicon use.
+- Compare shape, wording, spacing, navy, and gold treatment against the original at multiple sizes before approval.
+- Keep the source JPEG available until the client has approved the reconstructed SVG; do not silently replace the identity with an approximate mark.
+
 ### WhatsApp ordering links
 
 Use the standard WhatsApp URL format with an encoded message. A product action should produce wording similar to:
 
-> Hello Jamy Fashions UG, I am interested in the [Product Name] priced at UGX [Price]. Is it available in my size/colour?
+> Hello Jamy Fashion's UG, I am interested in the [Product Name] priced at UGX [Price]. Is it available in my size/colour?
 
-The exact phone number and wording must be confirmed before the client demo is shared publicly. No customer information will be collected by the website in this phase.
+Use the confirmed number `256701419722` in URL-safe international format. The final wording should be tested on mobile and desktop before the client demo is shared publicly. No customer information will be collected by the website in this phase.
 
 ## 8. Implementation Phases
 
 ### Phase 0 — Content audit and direction
 
-- Confirm the exact brand name and inspect the logo.
+- Use the confirmed brand name and inspect the logo at navigation and display sizes.
 - Review every supplied product photo for resolution, orientation, and suitability.
 - Match product information to the correct image.
-- Confirm contact and social links.
-- Select one hero image and the strongest 6 sample products.
+- Use the confirmed WhatsApp number and mark TikTok as a temporary destination.
+- Use the selected hero image and six-item sample working set.
 - Finalise the palette and type direction from the real assets.
 
 **Exit condition:** all displayed content is traceable to an approved client asset or clearly marked placeholder.
@@ -270,7 +311,7 @@ The exact phone number and wording must be confirmed before the client demo is s
 
 - Add storefront design tokens to the Tailwind 4 CSS-first theme.
 - Establish content width, spacing rhythm, typography, buttons, badges, image ratios, and focus styles.
-- Prepare and optimise logo and product assets.
+- Reconstruct, review, and export the SVG logo variants; prepare and optimise product assets.
 - Define typed category, product, and business-link data.
 
 **Exit condition:** the visual system and content model are ready for consistent component work.
@@ -350,7 +391,7 @@ The sample is ready to present when:
 - The homepage no longer resembles the default Laravel starter screen.
 - The client logo, palette, and supplied product imagery create a coherent branded experience.
 - The headline, category structure, and product grid make the offering clear immediately.
-- At least six sample items show correct image-to-product matching, prices, and useful descriptions, if supplied.
+- Six sample items show correct image-to-product matching, approved demonstration prices, and useful descriptions.
 - Every primary order action opens the confirmed WhatsApp number with relevant prefilled context.
 - The page is polished and usable on phone, tablet, and desktop.
 - Navigation is accessible by touch and keyboard.
@@ -364,7 +405,7 @@ The sample is ready to present when:
 - **Low-resolution WhatsApp images:** use careful crops, conservative display sizes, and request originals where necessary.
 - **Missing product details:** keep content visibly marked as sample rather than inventing facts.
 - **Scope expansion:** keep the demo to one homepage and list all additional features as separately priced future work.
-- **Incorrect WhatsApp destination:** require client confirmation and test the final international-format number.
+- **Incorrect WhatsApp destination:** use the confirmed `256701419722` destination and test it on mobile and desktop.
 - **Out-of-stock sample items:** confirm availability immediately before presenting or launching the page.
 - **Generic visual result:** derive palette, image treatment, and typography from the actual logo and strongest product photography.
 - **Slow page on mobile data:** limit font weights, optimise images, avoid embedded social feeds, and defer non-critical media.
@@ -387,4 +428,4 @@ Before this expansion, define the catalogue size, order workflow, who maintains 
 
 ## 13. Immediate Next Action
 
-Place the client's original logo and product files in a clearly labelled source folder, create a simple product-content sheet, and complete Phase 0. Once the assets are verified, implementation can begin with the design foundation and the homepage component build.
+The supplied assets are now sufficient for the homepage concept. Begin by reconstructing and visually verifying the SVG logo, preparing responsive image derivatives, and defining the typed six-item sample product set. The remaining production-only facts can be confirmed after the client reviews the concept.

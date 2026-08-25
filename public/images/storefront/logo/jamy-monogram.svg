@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+    <title id="title">Jamy Fashion's UG monogram</title>
+    <defs>
+        <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#9D762B" />
+            <stop offset="0.5" stop-color="#D8B768" />
+            <stop offset="1" stop-color="#B78B37" />
+        </linearGradient>
+    </defs>
+    <rect width="160" height="160" rx="34" fill="#0D274D" />
+    <path d="M52 35c0-13 10-23 23-23 12 0 22 9 22 21 0 9-5 15-13 20l-6 4" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round" />
+    <path d="M77 57 24 88c-8 5-4 14 5 14h99c9 0 13-9 5-14Z" fill="none" stroke="url(#gold)" stroke-width="5" stroke-linejoin="round" />
+    <text x="42" y="143" fill="#FFF9ED" font-family="Georgia, serif" font-size="72" font-style="italic" font-weight="700">J</text>
+    <text x="77" y="143" fill="url(#gold)" font-family="Georgia, serif" font-size="72">F</text>
+</svg>
