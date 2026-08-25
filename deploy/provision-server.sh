@@ -19,7 +19,7 @@ if [[ ! "${DEPLOY_PUBLIC_KEY}" =~ ^(ssh-ed25519|ssh-rsa)[[:space:]]+[A-Za-z0-9+/
     exit 1
 fi
 
-for required_command in curl php nginx systemctl; do
+for required_command in curl mysql php nginx systemctl; do
     if ! command -v "${required_command}" >/dev/null 2>&1; then
         echo "Missing required command: ${required_command}" >&2
         exit 1
@@ -31,7 +31,7 @@ if [[ ! -S /run/php/php8.4-fpm.sock ]]; then
     exit 1
 fi
 
-required_php_modules=(ctype curl dom fileinfo filter mbstring openssl pcre PDO pdo_sqlite session tokenizer xml)
+required_php_modules=(ctype curl dom fileinfo filter mbstring openssl pcre PDO pdo_mysql session tokenizer xml)
 installed_php_modules="$(php -m | tr '[:upper:]' '[:lower:]')"
 
 for php_module in "${required_php_modules[@]}"; do
@@ -60,8 +60,7 @@ install -d -m 0755 -o "${DEPLOY_USER}" -g "${WEB_GROUP}" \
     "${APP_ROOT}" \
     "${APP_ROOT}/incoming" \
     "${APP_ROOT}/releases" \
-    "${APP_ROOT}/shared" \
-    "${APP_ROOT}/shared/database"
+    "${APP_ROOT}/shared"
 
 install -d -m 2775 -o "${DEPLOY_USER}" -g "${WEB_GROUP}" \
     "${APP_ROOT}/shared/storage/app/private" \
@@ -74,15 +73,28 @@ install -d -m 2775 -o "${DEPLOY_USER}" -g "${WEB_GROUP}" \
 if [[ ! -f "${APP_ROOT}/shared/.env" ]]; then
     cp "${SCRIPT_DIRECTORY}/production.env.example" "${APP_ROOT}/shared/.env"
     generated_app_key="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
+    generated_database_password="$(php -r 'echo bin2hex(random_bytes(24));')"
     sed -i "s|^APP_KEY=$|APP_KEY=${generated_app_key}|" "${APP_ROOT}/shared/.env"
+    sed -i "s|^DB_PASSWORD=$|DB_PASSWORD=${generated_database_password}|" "${APP_ROOT}/shared/.env"
 fi
 
-touch "${APP_ROOT}/shared/database/database.sqlite"
-chown "${DEPLOY_USER}:${WEB_GROUP}" \
-    "${APP_ROOT}/shared/.env" \
-    "${APP_ROOT}/shared/database/database.sqlite"
+database_password="$(sed -n 's/^DB_PASSWORD=//p' "${APP_ROOT}/shared/.env")"
+
+if [[ ! "${database_password}" =~ ^[a-f0-9]{48}$ ]]; then
+    echo 'The production DB_PASSWORD must be a 48-character hexadecimal value.' >&2
+    exit 1
+fi
+
+mysql --protocol=socket <<SQL
+CREATE DATABASE IF NOT EXISTS \`jamyfashions\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'jamyfashions'@'127.0.0.1' IDENTIFIED BY '${database_password}';
+ALTER USER 'jamyfashions'@'127.0.0.1' IDENTIFIED BY '${database_password}';
+GRANT ALL PRIVILEGES ON \`jamyfashions\`.* TO 'jamyfashions'@'127.0.0.1';
+FLUSH PRIVILEGES;
+SQL
+
+chown "${DEPLOY_USER}:${WEB_GROUP}" "${APP_ROOT}/shared/.env"
 chmod 0640 "${APP_ROOT}/shared/.env"
-chmod 0660 "${APP_ROOT}/shared/database/database.sqlite"
 
 if [[ ! -f "/etc/nginx/sites-available/${DOMAIN}" ]]; then
     install -m 0644 \
