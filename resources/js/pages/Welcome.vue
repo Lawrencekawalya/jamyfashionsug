@@ -365,7 +365,9 @@ const services = [
                 </div>
             </section>
 
-            <section class="px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
+            <section
+                class="px-5 pt-20 pb-10 sm:px-8 sm:pt-28 sm:pb-14 lg:px-10"
+            >
                 <div class="mx-auto max-w-7xl">
                     <div
                         class="mb-11 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"
@@ -480,7 +482,7 @@ const services = [
 
             <section
                 id="new-arrivals"
-                class="scroll-mt-24 bg-white px-5 py-20 sm:px-8 sm:py-28 lg:px-10"
+                class="scroll-mt-24 bg-white px-5 pt-10 pb-20 sm:px-8 sm:pt-14 sm:pb-28 lg:px-10"
             >
                 <div class="mx-auto max-w-7xl">
                     <div class="mb-12 text-center">

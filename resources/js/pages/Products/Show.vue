@@ -354,7 +354,7 @@ const productEnquiryUrl = computed(() => {
             </section>
 
             <section
-                class="border-y border-brand-navy/10 bg-white px-5 py-16 sm:px-8 lg:px-10"
+                class="border-y border-brand-navy/10 bg-white px-5 pt-16 pb-8 sm:px-8 lg:px-10"
             >
                 <div
                     class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.8fr_1.2fr]"
@@ -392,7 +392,7 @@ const productEnquiryUrl = computed(() => {
 
             <section
                 v-if="relatedProducts.length"
-                class="px-5 py-20 sm:px-8 sm:py-28 lg:px-10"
+                class="px-5 pt-10 pb-20 sm:px-8 sm:pt-14 sm:pb-28 lg:px-10"
             >
                 <div class="mx-auto max-w-7xl">
                     <div
